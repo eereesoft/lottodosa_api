@@ -1,3 +1,7 @@
-psycopg2-binary # python과 PostgreSQL 연결 라이브러리
-django          # 장고 프로젝트
-gunicorn        # 파이썬 웹앱 배포시 사용되는 WSGI HTTP 서버 역할
+psycopg2-binary    # python과 PostgreSQL 연결 라이브러리
+django             # 장고 프로젝트
+gunicorn           # 파이썬 웹앱 배포시 사용되는 WSGI HTTP 서버 역할
+django-apscheduler # 장고 스케줄러
+pandas             # 데이터 분석 및 CSV 파일 처리 라이브러리
+requests           # HTTP 요청을 보내는 라이브러
+beautifulsoup4     # HTML 및 XML 파일 구문 분석 라이브러리

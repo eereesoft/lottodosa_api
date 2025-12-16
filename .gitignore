@@ -13,3 +13,9 @@ settings/local.py
 
 # VSCode
 .vscode/
+
+# Data
+*.csv
+
+# Test
+test.py

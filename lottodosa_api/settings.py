@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_apscheduler',
     'lotto_core',
 ]
 
@@ -78,7 +79,7 @@ DATABASES = {
         #'ENGINE': 'django.db.backends.sqlite3',
         #'NAME': BASE_DIR / 'db.sqlite3',
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'lottodosa',
+        'NAME': 'lotto',
         'USER': 'eeree',
         'PASSWORD': 'dlflthvmxm1!',
         'HOST': 'localhost',
@@ -109,9 +110,9 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/5.2/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'ko-kr'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Seoul'
 
 USE_I18N = True
 
@@ -127,3 +128,37 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+# 로깅 설정
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "formatters": {
+        "verbose": {
+            # Gunicorn 로그 형식과 유사하게 맞추어 가독성을 높입니다.
+            "format": "[%(asctime)s] [%(process)d] [%(levelname)s] %(message)s",
+            "datefmt": "%Y-%m-%d %H:%M:%S %z",
+        },
+    },
+    "handlers": {
+        # 로그를 콘솔(표준 출력)로 보냅니다.
+        "console": {
+            "level": "INFO",
+            "class": "logging.StreamHandler",
+            "formatter": "verbose",
+        },
+    },
+    "root": {
+        # 모든 로그의 기본 핸들러를 console로 설정합니다.
+        "handlers": ["console"],
+        "level": "INFO",
+    },
+    "loggers": {
+        "django": {
+            "handlers": ["console"],
+            "level": "INFO",
+            "propagate": False, # 중복 로깅 방지
+        },
+    },
+}
