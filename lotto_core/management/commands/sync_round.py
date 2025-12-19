@@ -1,6 +1,7 @@
 from django.core.management.base import BaseCommand, CommandError
 from lotto_core.utils.round_parser import RoundParser
 from lotto_core.utils.wins_parser import WinsParser
+from lotto_core import services
 import time
 
 
@@ -17,7 +18,8 @@ class Command(BaseCommand):
             self.stdout.write(self.style.SUCCESS('>> 최신 로또 회차 정보 동기화를 시작합니다.'))
 
             round_parser = RoundParser(None)
-            last_round = round_parser.get_last_round()
+            last_round_obj = services.get_last_round()
+            last_round = last_round_obj.rid if last_round_obj else 0
             next_round = last_round + 1
             self.stdout.write(f"# 현재 마지막 회차: {last_round}. 다음 회차({next_round}) 파싱을 시도합니다.")
 

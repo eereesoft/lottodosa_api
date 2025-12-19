@@ -5,7 +5,7 @@ import signal
 from django.core.management.base import BaseCommand
 from apscheduler.schedulers.background import BackgroundScheduler
 from django_apscheduler.jobstores import DjangoJobStore
-from lotto_core.jobs import sync_round_job, sync_stores_job
+from lotto_core.jobs import sync_round_job, sync_stores_job, sync_cafe_job
 
 logger = logging.getLogger(__name__)
 
@@ -57,6 +57,19 @@ class Command(BaseCommand):
             replace_existing=True,
         )
         logger.info("스케줄러: '판매점 정보 동기화 2' 작업이 등록되었습니다. (매주 토 10:00)")
+
+        # 3. 카페 정보 동기화 작업 등록
+        scheduler.add_job(
+            sync_cafe_job,
+            trigger='cron',
+            day_of_week='mon',
+            hour='09',
+            minute='00',
+            id='sync_cafe_job',
+            name='카페 정보 동기화',
+            replace_existing=True,
+        )
+        logger.info("스케줄러: '카페 정보 동기화' 작업이 등록되었습니다. (매주 월 09:00)")
 
         def shutdown_scheduler(signum, frame):
             logger.info("종료 시그널을 수신했습니다. 스케줄러를 안전하게 종료합니다...")

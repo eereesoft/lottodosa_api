@@ -16,6 +16,10 @@ settings/local.py
 
 # Data
 *.csv
+*.ini
 
 # Test
 test.py
+
+# Chrome
+*.deb

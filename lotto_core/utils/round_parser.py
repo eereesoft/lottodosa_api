@@ -28,22 +28,6 @@ class RoundParser:
             return ''
         return s.replace(',', '').replace('원', '').strip()
 
-    def get_last_round(self):
-        """
-        Django DB의 'Round' 테이블에서 가장 큰 회차 번호(rid)를 가져옵니다.
-        """
-        print("## get_last_round")
-        # Round.objects.aggregate(Max('rid'))는 {'rid__max': <값>} 형태의 딕셔너리를 반환합니다.
-        # 테이블이 비어있으면 {'rid__max': None}을 반환합니다.
-        max_rid_data = Round.objects.aggregate(max_rid=Max('rid'))
-        last_round = max_rid_data.get('max_rid')
-
-        if last_round is None:
-            print("# 'Round' 테이블에 데이터가 없습니다. 0을 반환합니다.")
-            return 0
-        else:
-            return last_round
-
     def parse_latest_round(self):
         print(f'## parse_latest_round')
         resp = self.session.get(self.BYWIN_URL)
