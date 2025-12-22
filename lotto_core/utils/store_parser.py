@@ -125,11 +125,15 @@ class StoreParser:
 
         # 1. 신규 추가 대상
         sids_to_add = parsed_sids - existing_sids
-        stores_to_create = [Store(sid=sid, **parsed_stores_map[sid]) for sid in sids_to_add]
+        print(f"# 신규 추가 대상: {len(sids_to_add)}개")
+        for sid in sids_to_add:
+            store_data = parsed_stores_map[sid]
+            Store.objects.create(sid=sid, **store_data)
+            print(f"[INSERT] 판매점 생성: {sid} - {store_data['sname']}")
 
         # 2. 업데이트 대상
         sids_to_check_update = parsed_sids.intersection(existing_sids)
-        stores_to_update = []
+        print(f"# 업데이트 점검 대상: {len(sids_to_check_update)}개")
         for sid in sids_to_check_update:
             store_obj = existing_stores_map[sid]
             parsed_data = parsed_stores_map[sid]
@@ -145,32 +149,19 @@ class StoreParser:
                     is_changed = True
             if is_changed:
                 store_obj.enabled = True
-                stores_to_update.append(store_obj)
+                store_obj.save()
+                print(f"[UPDATE] 판매점 수정: {sid} - {store_obj.sname}")
 
         # 3. 비활성화 대상
         sids_to_disable = existing_sids - parsed_sids
-        stores_to_disable = []
+        print(f"# 비활성화 점검 대상: {len(sids_to_disable)}개")
         for sid in sids_to_disable:
             if sid == self.INTERNET_STORE_SID:
                 continue
             store_obj = existing_stores_map[sid]
             if store_obj.enabled:
                 store_obj.enabled = False
-                stores_to_disable.append(store_obj)
+                store_obj.save()
+                print(f"[DISABLE] 판매점 비활성화: {sid} - {store_obj.sname}")
 
-        # 데이터베이스 트랜잭션
-        with transaction.atomic():
-            if stores_to_create:
-                Store.objects.bulk_create(stores_to_create)
-                print(f"# {len(stores_to_create)}개의 판매점을 새로 추가했습니다.")
-            if stores_to_update:
-                Store.objects.bulk_update(stores_to_update, self.UPDATE_FIELDS)
-                print(f"# {len(stores_to_update)}개의 판매점 정보를 업데이트했습니다.")
-            if stores_to_disable:
-                Store.objects.bulk_update(stores_to_disable, ['enabled'])
-                print(f"# {len(stores_to_disable)}개의 판매점을 비활성화했습니다.")
-
-        if not any([stores_to_create, stores_to_update, stores_to_disable]):
-            print("# 변경된 판매점 정보가 없습니다.")
-        
         print("# 판매점 정보 동기화가 완료되었습니다.")
