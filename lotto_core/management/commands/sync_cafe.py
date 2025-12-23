@@ -3,6 +3,9 @@ from lotto_core.utils.cafe_parser import CafeParser
 from lotto_core import services
 from django.db import transaction
 import time
+import json
+import os
+from django.utils import timezone
 
 
 class Command(BaseCommand):
@@ -72,6 +75,27 @@ class Command(BaseCommand):
                                 db_last_round.rule_garo = 0
 
                             db_last_round.save()
+
+                        # dbsync.json 업데이트
+                        try:
+                            file_path = os.path.join(os.path.dirname(__file__), '..', '..', '..', 'dbsync.json')
+
+                            data = {}
+                            if os.path.exists(file_path):
+                                with open(file_path, 'r', encoding='utf-8') as f:
+                                    try:
+                                        data = json.load(f)
+                                    except json.JSONDecodeError:
+                                        pass
+
+                            data['cafe'] = timezone.now().strftime('%Y-%m-%d')
+
+                            with open(file_path, 'w', encoding='utf-8') as f:
+                                json.dump(data, f, indent=4, ensure_ascii=False)
+
+                            self.stdout.write(self.style.SUCCESS("# dbsync.json의 round 항목을 업데이트했습니다."))
+                        except Exception as e:
+                            self.stdout.write(self.style.ERROR(f"# dbsync.json 업데이트 실패: {e}"))
 
                         self.stdout.write(self.style.SUCCESS('>> 성공적으로 업데이트되었습니다.'))
                         break # 성공했으므로 루프 종료

@@ -15,6 +15,7 @@ settings/local.py
 .vscode/
 
 # Data
+dbsync.json
 *.csv
 *.ini
 
