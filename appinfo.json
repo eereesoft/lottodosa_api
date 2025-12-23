@@ -1,0 +1,24 @@
+{
+    "version": {
+        "android": { "latest": "1.0.0", "min": "0.0.0" },
+        "ios": { "latest": "1.0.0", "min": "0.0.0" }
+    },
+    "url": {
+        "android": "https://play.google.com/store/apps/details?id=...",
+        "ios": "https://apps.apple.com/app/id..."
+    },
+    "notice": {
+        "android": {
+            "show": true, 
+            "title": "공지 테스트",
+            "content": "서버 공지 테스트입니다.",
+            "is_critical": false
+        },
+        "ios": {
+            "show": true, 
+            "title": "공지 테스트",
+            "content": "서버 공지 테스트입니다.",
+            "is_critical": false
+        }
+    }
+}

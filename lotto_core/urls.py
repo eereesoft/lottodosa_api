@@ -2,6 +2,10 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
+    # INFO
+    path('app/info', views.get_app_info, name='get_app_info'), # GET
+    path('db/updated', views.get_db_updated, name='get_db_updated'), # GET
+
     # ROUND
     path('rounds/all', views.get_all_rounds, name='get_all_rounds'), # GET
     path('rounds/last', views.get_last_round, name='get_last_round'), # GET

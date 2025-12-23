@@ -6,8 +6,38 @@ import json
 from django.core.exceptions import ValidationError
 from django.forms.models import model_to_dict
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+import os
 
 from . import services
+
+
+# INFO
+
+
+@require_GET
+def get_app_info(request):
+    try:
+        file_path = os.path.join(os.path.dirname(__file__), '..', 'appinfo.json')
+        if os.path.exists(file_path):
+            with open(file_path, 'r', encoding='utf-8') as f:
+                data = json.load(f)
+            return JsonResponse(data, status=200, json_dumps_params={'ensure_ascii': False})
+        return JsonResponse({'status': 'error', 'message': 'appinfo.json not found'}, status=404)
+    except Exception as e:
+        return JsonResponse({'status': 'error', 'message': str(e)}, status=500)
+
+
+@require_GET
+def get_db_updated(request):
+    try:
+        file_path = os.path.join(os.path.dirname(__file__), '..', 'dbsync.json')
+        if os.path.exists(file_path):
+            with open(file_path, 'r', encoding='utf-8') as f:
+                data = json.load(f)
+            return JsonResponse(data, status=200, json_dumps_params={'ensure_ascii': False})
+        return JsonResponse({'status': 'error', 'message': 'appinfo.json not found'}, status=404)
+    except Exception as e:
+        return JsonResponse({'status': 'error', 'message': str(e)}, status=500)
 
 
 # ROUND
