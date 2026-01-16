@@ -63,6 +63,11 @@ class Store(models.Model):
     addr_doro = models.CharField(max_length=80)
     geo_e = models.FloatField(default=0) # longitude
     geo_n = models.FloatField(default=0) # latitude
+    l645 = models.BooleanField(null=True) # 로또복권 판매 여부
+    p720 = models.BooleanField(null=True) # 연금복권 판매 여부
+    st05 = models.BooleanField(null=True) # 스피또500 판매 여부
+    st10 = models.BooleanField(null=True) # 스피또1000 판매 여부
+    st20 = models.BooleanField(null=True) # 스피또2000 판매 여부
     matches1 = models.IntegerField(default=0) # 1등 당첨 수 
     matches2 = models.IntegerField(default=0) # 2등 당첨 수
     updated_at = models.DateTimeField(auto_now=True) # 갱신일
